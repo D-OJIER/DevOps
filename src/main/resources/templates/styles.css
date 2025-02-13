@@ -1,0 +1,167 @@
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  background-image: url("components/bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  user-select: none; /* Disable text selection */
+  cursor: url("components/catcursor1.png"), auto; /* Default cursor */
+}
+
+body:active,
+body *:active {
+  cursor: url("components/catcursor2.png"), auto; /* Cursor when clicking */
+}
+
+img,
+canvas {
+  user-select: none; /* Disable image and canvas selection */
+  -webkit-user-drag: none; /* Disable image dragging in WebKit browsers */
+  -moz-user-drag: none; /* Disable image dragging in Firefox */
+  -ms-user-drag: none; /* Disable image dragging in Internet Explorer */
+  user-drag: none; /* Disable image dragging in other browsers */
+}
+
+.fish {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  pointer-events: none;
+  opacity: 1;
+  animation: fishPopAndFall 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes fishPopAndFall {
+  0% {
+    transform: translateY(0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100px) scale(0.5) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.bone {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  pointer-events: none;
+  opacity: 1;
+  animation: bonePopAndFall 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes bonePopAndFall {
+  0% {
+    transform: translateY(0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100px) scale(0.5) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Right-side container for points and shop */
+.points-container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 250px;
+  height: auto;
+  background: #dc5f00; /* Hovered color as the base */
+  color: #eeeeee;
+  border: 4px solid #373a40;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px #686d76;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-family: "Arial", sans-serif;
+}
+
+.points-container p {
+  font-size: 28px;
+  margin: 10px 0;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px #dc5f00;
+}
+
+.points-container span {
+  font-size: 32px;
+  font-weight: 600;
+  color: #686d76;
+  text-shadow: 2px 2px 4px #dc5f00;
+}
+
+/* Shop button styles */
+.points-container button {
+  background-color: #dc5f00;
+  color: #eeeeee;
+  border: none;
+  padding: 10px 20px;
+  margin: 10px 0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 18px;
+  box-shadow: 0 4px 8px #686d76;
+  transition: background-color 0.3s ease;
+}
+
+/* No hover effect needed, keep same style */
+.points-container button {
+  background-color: #dc5f00;
+}
+
+.points-container button:active {
+  background-color: #ff8000; /* Change on click if desired */
+}
+
+.power-up {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  pointer-events: auto; /* Allow clicking */
+  animation: flyAcrossScreen 10s linear; /* Increased duration to reduce speed */
+}
+
+@keyframes flyAcrossScreen {
+  0% {
+    transform: translateX(100vw) translateY(0);
+  }
+  100% {
+    transform: translateX(-50px) translateY(0); /* Ensure it goes off-screen */
+  }
+}
+
+.character-container {
+  display: flex;
+  gap: 5px; /* Reduced from 10px to 0px */
+  align-items: center;
+  justify-content: center;
+}
+
+#dogCanvas {
+  display: none; /* Initially hidden */
+  margin-left: -20px; /* Add negative margin to bring dog closer */
+}
+
+.character-table {
+  margin-top: 0px;
+  border-spacing: 0px;
+  border-collapse: separate;
+}
+
+.character-cell {
+  padding: 0px;
+  text-align: center;
+  vertical-align: middle;
+}

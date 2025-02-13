@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gaime</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body onclick="addPoint(event)">
+    <div class="points-container">
+      <p>Points: <span id="score">0</span></p>
+      <button onclick="buyDoubleIncome()">Double Income (10 Points)</button>
+      <button onclick="switchOutfit('components/Idle.png', 10, 32, 32, 4)">
+        Outfit 1
+      </button>
+      <button onclick="buyOutfit2()">Buy Outfit 2 (50 Points)</button>
+      <button onclick="switchOutfit('components/Box3.png', 4, 32, 32, 4)">
+        Equip Outfit 2
+      </button>
+      <button onclick="buyDog()">Buy Dog Companion (20 Points)</button>
+      <button onclick="buyBlackCatOutfit()">Buy BlackCatIdle (30 Points)</button>
+      <button onclick="switchOutfit('components/BlackCatIdle.png', 7, 32, 32, 4)">
+        Equip BlackCatIdle
+      </button>
+      
+    </div>
+
+    <div class="character-container">
+      <canvas id="gameCanvas"></canvas>
+      <canvas id="dogCanvas"></canvas>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

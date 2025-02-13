@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            
+            background: url("components/bg_login.png") no-repeat fixed;
+            background-size: 100% 110%; /* Adjust size as needed */
+            background-position: 0px 0px; /* Move the image horizontally (20px) and vertically (50px) */
+            
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        form {
+            position: absolute;
+            top: 80%; /* Adjust this percentage for vertical positioning */
+            left: 52%; /* Centers horizontally */
+            transform: translate(-50%, -50%); /* Ensures perfect centering */
+
+            padding: 20px 40px;
+            border-radius: 10px;
+            text-align: center;
+            width: 20%;
+        }
+
+        form input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .button-container {
+            margin: 10px 0;
+            position: relative;
+            width: 100%; /* Ensures it scales with the button */
+        }
+
+        .button-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 110%;
+            height: 100%;
+            background: url("components/button.png") no-repeat center center;
+            background-size: 100% 100%; /* Ensures scalability */
+            z-index: -1; /* Places the image behind the button */
+        }
+
+        form button {
+            
+            width: 110%;
+            padding: 10px;
+            background-color: transparent; /* Transparent background */
+            border: none; /* Removes the border completely */
+            color: #fefeff; /* Set the text color */
+            border-radius: 5px; /* Optional rounded corners */
+            font-size: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        title{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 110%;
+            height: 100%;
+            background: url("components/Title.png") no-repeat center center;
+            background-size: 100% 100%; /* Ensures scalability */
+            z-index: 1; /* Places the image behind the button */
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div class="title"></div>
+    <form>
+        <input type="text" placeholder="Username">
+        <input type="password" placeholder="Password">
+        <div class="button-container">
+            <button type="submit">Log In</button>
+        </div>
+    </form>
+</body>
+</html>

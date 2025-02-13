@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat Sprite Animation</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            border: 2px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+
+    <script>
+        // Variables for the cat sprite animation
+        let currentSprite = "components/Hero-idle-Sheet.png"; // Path to the sprite image
+        let totalFrames = 2; // Total number of frames in the sprite sheet
+        let frameWidth = 24; // Width of each frame in the sprite sheet
+        let frameHeight = 24; // Height of each frame in the sprite sheet
+        let scale = 4; // Scale factor for the cat sprite
+        let frameSpeed = 20; // Speed of the animation (lower value = faster)
+        let frameCount = 0; // Counter for frame updates
+        let currentFrame = 0; // Current frame index in the sprite sheet
+        let animationFrameId; // To store the animation frame ID
+
+        // Get the canvas and its context for the cat
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        // Set canvas size for the cat sprite
+        canvas.width = 178;
+        canvas.height = 150;
+
+        // Load the cat sprite
+        const sprite = new Image();
+        sprite.src = currentSprite;
+
+        // Function to animate the cat sprite
+        function animateSprite() {
+            // Clear the canvas for each frame
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Calculate the X position for the current frame in the sprite sheet
+            let frameX = currentFrame * frameWidth;
+
+            // Draw the current frame of the cat sprite on the canvas
+            ctx.drawImage(
+                sprite,               // The sprite image
+                frameX, 0,            // Position of the frame in the sprite sheet
+                frameWidth, frameHeight, // Size of the frame
+                40, 50,               // Position of the sprite on the canvas
+                frameWidth * scale,   // Width of the sprite (scaled)
+                frameHeight * scale   // Height of the sprite (scaled)
+            );
+
+            // Update the frame count
+            frameCount++;
+            if (frameCount >= frameSpeed) {
+                currentFrame = (currentFrame + 1) % totalFrames; // Loop through frames
+                frameCount = 0; // Reset the frame counter
+            }
+
+            // Request the next frame to continue the animation
+            animationFrameId = requestAnimationFrame(animateSprite);
+        }
+
+        // Load the sprite and start the animation once the image is ready
+        sprite.onload = () => {
+            currentFrame = 0; // Start at the first frame
+            frameCount = 0; // Reset the frame count
+            animateSprite(); // Start the animation
+        };
+    </script>
+</body>
+</html>

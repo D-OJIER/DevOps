@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaime</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            background-image: url('components/bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            user-select: none; /* Disable text selection */
+        }
+
+        img, canvas {
+            user-select: none; /* Disable image and canvas selection */
+            -webkit-user-drag: none; /* Disable image dragging in WebKit browsers */
+            -moz-user-drag: none; /* Disable image dragging in Firefox */
+            -ms-user-drag: none; /* Disable image dragging in Internet Explorer */
+            user-drag: none; /* Disable image dragging in other browsers */
+        }
+
+        .fish {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            pointer-events: none;
+            opacity: 1;
+            animation: fishPopAndFall 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes fishPopAndFall {
+            0% {
+                transform: translateY(0) scale(1) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100px) scale(0.5) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Right-side container for points and shop */
+        .points-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 250px;
+            height: auto;
+            background: #DC5F00; /* Hovered color as the base */
+            color: #EEEEEE;
+            border: 4px solid #373A40;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px #686D76;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .points-container p {
+            font-size: 28px;
+            margin: 10px 0;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px #DC5F00;
+        }
+
+        .points-container span {
+            font-size: 32px;
+            font-weight: 600;
+            color: #686D76;
+            text-shadow: 2px 2px 4px #DC5F00;
+        }
+
+        /* Shop button styles */
+        .points-container button {
+            background-color: #DC5F00;
+            color: #EEEEEE;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 18px;
+            box-shadow: 0 4px 8px #686D76;
+            transition: background-color 0.3s ease;
+        }
+
+        /* No hover effect needed, keep same style */
+        .points-container button {
+            background-color: #DC5F00;
+        }
+
+        .points-container button:active {
+            background-color: #FF8000; /* Change on click if desired */
+        }
+    </style>
+</head>
+<body onclick="addPoint(event)">
+    <div class="points-container">
+        <p>Points: <span id="score">0</span></p>
+        <button onclick="buyDoubleIncome()">Double Income (10 Points)</button>
+        <button onclick="switchOutfit('components/Idle.png', 10, 32, 32, 4)">Outfit 1</button>
+        <button onclick="switchOutfit('components/Box3.png', 4, 32, 32, 3)">Outfit 2</button>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <script>
+        let score = 0;
+        let doubleIncomeActive = false;
+        let doubleIncomeTimer = null;
+        let currentSprite = "components/Idle.png"; // Default sprite
+        let totalFrames = 10;
+        let frameWidth = 32;
+        let frameHeight = 32;
+        let scale = 4;
+        let frameSpeed = 5; // Lower is faster
+        let frameCount = 0;
+        let currentFrame = 0;
+        let animationFrameId;
+
+        function addPoint(event) {
+            let pointsToAdd = doubleIncomeActive ? 2 : 1;
+            score += pointsToAdd;
+            document.getElementById('score').innerText = score;
+            spawnFish(event.clientX, event.clientY);
+        }
+
+        function spawnFish(x, y) {
+            const fishImages = ['components/fish1.png', 'components/fish2.png', 'components/fish3.png'];
+            const fish = document.createElement('img');
+            fish.src = fishImages[Math.floor(Math.random() * fishImages.length)];
+            fish.classList.add('fish');
+
+            // Randomize the starting position within a range
+            const randomXOffset = Math.floor(Math.random() * 50) - 25;
+            const randomYOffset = Math.floor(Math.random() * 50) - 25;
+
+            const randomRotation = Math.floor(Math.random() * 360);
+
+            fish.style.left = `${x - 25 + randomXOffset}px`;
+            fish.style.top = `${y - 25 + randomYOffset}px`;
+            fish.style.transform = `rotate(${randomRotation}deg)`;
+
+            document.body.appendChild(fish);
+
+            fish.style.animationDuration = `${Math.random() * 1.5 + 1.5}s`;
+
+            setTimeout(() => fish.remove(), 3000);
+        }
+
+        function buyDoubleIncome() {
+            if (score >= 10) {
+                score -= 10; // Deduct points for purchase
+                document.getElementById('score').innerText = score;
+
+                // Activate double income for 10 seconds
+                doubleIncomeActive = true;
+                setTimeout(() => {
+                    doubleIncomeActive = false;
+                }, 10000); // Reset after 10 seconds
+            } else {
+                alert("Not enough points!");
+            }
+        }
+
+        function switchOutfit(spritePath, frames, width, height, newScale) {
+            currentSprite = spritePath;
+            totalFrames = frames;
+            frameWidth = width;
+            frameHeight = height;
+            scale = newScale;
+            loadSprite();
+        }
+
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        // Set canvas size
+        canvas.width = 176; // Increased width
+        canvas.height = 150; // Increased height
+
+        // Load sprite image
+        const sprite = new Image();
+        sprite.src = currentSprite; // Ensure the image is in the correct path
+
+        function animateSprite() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Calculate frame position
+            let frameX = currentFrame * frameWidth;
+
+            // Draw the sprite with increased size
+            ctx.drawImage(sprite, frameX, 0, frameWidth, frameHeight, 50, 10, frameWidth * scale, frameHeight * scale);
+
+            // Update frame index
+            frameCount++;
+            if (frameCount >= frameSpeed) {
+                currentFrame = (currentFrame + 1) % totalFrames;
+                frameCount = 0;
+            }
+
+            animationFrameId = requestAnimationFrame(animateSprite);
+        }
+
+        function loadSprite() {
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            sprite.src = currentSprite;
+            sprite.onload = () => {
+                currentFrame = 0; // Reset frame index
+                frameCount = 0; // Reset frame count
+                animateSprite();
+            };
+        }
+
+        // Start animation when image loads
+        loadSprite();
+    </script>
+</body>
+</html>
