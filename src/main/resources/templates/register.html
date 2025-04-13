@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Register Page</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Press Start 2P', cursive;
+        background-color: #111;
+        background-image: radial-gradient(circle, #1e1e1e 1px, #111 1px);
+        background-size: 40px 40px;
+        color: #e9f5db;
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .container {
+        background-color: #239e4e;
+        border-radius: 12px;
+        padding: 40px 50px;
+        box-shadow: 0 0 25px #064e3b;
+        max-width: 500px;
+        width: 100%;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 1.2rem;
+        color: #ffce3d;
+        margin-bottom: 30px;
+        text-shadow: 2px 2px #222;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      label {
+        font-size: 0.75rem;
+        margin: 10px 0 5px;
+      }
+
+      input[type="text"],
+      input[type="password"] {
+        padding: 10px;
+        margin-bottom: 15px;
+        width: 80%;
+        border: none;
+        border-radius: 6px;
+        font-family: 'Press Start 2P', cursive;
+        font-size: 0.7rem;
+        background-color: #0f3d2e;
+        color: #fff;
+      }
+
+      input[type="submit"] {
+        padding: 10px 20px;
+        font-family: 'Press Start 2P', cursive;
+        font-size: 0.7rem;
+        color: #000;
+        background-color: #69f0ae;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #00c853;
+      }
+
+      .error {
+        color: red;
+        font-size: 0.65rem;
+        margin-top: 10px;
+      }
+
+      .login-link {
+        margin-top: 20px;
+      }
+
+      .login-link a {
+        text-decoration: none;
+        color: #ffd60a;
+        font-size: 0.75rem;
+      }
+
+      .login-link a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>New here?</h1>
+
+      <form th:action="@{/register}" method="post">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required />
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required />
+
+        <input type="submit" value="Register" />
+      </form>
+
+      <p class="error" th:if="${error}" th:text="${error}"></p>
+
+      <div class="login-link">
+        <p>Back again? <a th:href="@{/}">Return to Login</a></p>
+      </div>
+    </div>
+  </body>
+</html>

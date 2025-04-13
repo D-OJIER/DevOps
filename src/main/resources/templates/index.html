@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Roasts & Toasts</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+    <style>
+      @media (min-width: 600px) {
+        .points-container p, .points-container button {
+          flex: 1 1 auto;
+        }
+      }
+      .hamburger-menu {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        background: #dc5f00;
+        padding: 10px;
+        border-radius: 8px;
+      }
+      .hamburger-menu button {
+        background: none;
+        border: none;
+        color: #eeeeee;
+        font-size: 24px;
+        cursor: pointer;
+      }
+      @media (max-width: 600px) {
+        .points-container {
+          display: none;
+        }
+        .hamburger-menu {
+          display: flex;
+        }
+      }
+    </style>
+  </head>
+  <body onclick="addPoint(event)">
+    <div id="titleScreen">
+      <img th:src="@{/assets/Title.png}" alt="Game Title">
+      <div class="instructions">
+        <h2>How to Play</h2>
+        <p>🖱️ Click the cat to earn points</p>
+        <p>⚡ Build combos for bonus points</p>
+        <p>🎮 Unlock abilities and outfits</p>
+        <p>🌟 Catch power-ups for boosts</p>
+        <div class="ai-intro">
+          <h3>Meet Car(T)</h3>
+          <p>"Oh great, another player to coach... *sigh*</p>
+          <p>I'm your AI assistant, and yes, I will judge your clicking skills.</p>
+          <p>Let's see if you can impress me... (probably not) 😼"</p>
+        </div>
+      </div>
+    </div>
+    <div id="dayCounter">Day 1 - Spring (Day 1)</div>
+    <div class="points-container">
+      <div class="points-display">
+        <span id="score">0</span> Points
+      </div>
+      
+      <div class="tab-container">
+        <div class="tab-buttons">
+          <button class="tab-button active" onclick="switchTab('powerups')">Power-ups</button>
+          <button class="tab-button" onclick="switchTab('outfits')">Outfits</button>
+        </div>
+
+        <div id="powerups" class="tab-content active">
+          <button onclick="buyAndEquip('doubleIncome', 10)" data-ability="DOUBLE_POINTS" disabled>
+            Locked
+          </button>
+          <button id="autoClickerButton" onclick="buyAutoClicker()" data-ability="AUTO_CLICKER" disabled>
+            Locked
+          </button>
+          <button onclick="activateTripleIncome()" data-ability="TRIPLE_POWER" disabled>
+            Locked
+          </button>
+          <button id="timeAcceleratorButton" onclick="buyTimeAccelerator()" class="time-accelerator">
+            Time Accelerator (150 Points)
+          </button>
+        </div>
+
+        <div id="outfits" class="tab-content">
+          <button id="outfit1Button" onclick="switchOutfit('components/Idle.png', 10, 32, 32, 4)" data-text="The One">
+            Original
+          </button>
+          <button id="blackCatButton" onclick="buyAndEquip('components/BlackCatIdle.png', 30, 7, 32, 32, 4)" data-text="Unlock? 30P">
+            All boxed up!
+          <button id="outfit2Button" onclick="buyAndEquip('components/Box3.png', 50, 4, 32, 32, 4)" data-text="Unlock? 50P">
+            The Wise One
+          </button>
+
+          </button>
+        </div>
+      </div>
+    </div>
+    <div id="popup-container"></div>
+    <div class="hamburger-menu">
+      <button onclick="toggleMenu()">☰</button>
+      <div id="menuItems" style="display: none;">
+        <!-- Copy the same tab structure for mobile menu -->
+        <div class="tab-container">
+          <div class="tab-buttons">
+            <button class="tab-button active" onclick="switchTab('powerups-mobile')">Power-ups</button>
+            <button class="tab-button" onclick="switchTab('outfits-mobile')">Outfits</button>
+          </div>
+
+          <div id="powerups-mobile" class="tab-content active">
+            <button onclick="buyAndEquip('doubleIncome', 10)" data-ability="DOUBLE_POINTS" disabled>
+              Locked
+            </button>
+            <button id="autoClickerButtonMobile" onclick="buyAutoClicker()" data-ability="AUTO_CLICKER" disabled>
+              Locked
+            </button>
+            <button onclick="activateTripleIncome()" data-ability="TRIPLE_POWER" disabled>
+              Locked
+            </button>
+            <button id="timeAcceleratorButtonMobile" onclick="buyTimeAccelerator()" class="time-accelerator">
+              Time Accelerator (150 Points)
+            </button>
+          </div>
+
+          <div id="outfits-mobile" class="tab-content">
+            <button id="outfit1ButtonMenu" onclick="switchOutfit('components/Idle.png', 10, 32, 32, 4)" data-text="The One">
+              Original
+            </button>
+            <button id="outfit2ButtonMenu" onclick="buyAndEquip('components/Box3.png', 50, 4, 32, 32, 4)" data-text="Unlock? 30P">
+              All boxed up!
+            </button>
+            <button id="blackCatButtonMenu" onclick="buyAndEquip('components/BlackCatIdle.png', 30, 7, 32, 32, 4)" data-text="Unlock? 50P">
+              The Wise One
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="character-container">
+      <canvas id="gameCanvas"></canvas>
+    </div>
+    <div class="chat-container">
+        <div class="chat-header" onclick="toggleChat()">
+            <span class="chat-title">Car(T)</span>
+            <span class="minimize-button">-</span>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <!-- Messages will be added here dynamically -->
+        </div>
+        <div class="chat-input">
+            <input type="text" id="messageInput" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    <script th:src="@{/js/script.js}"></script>
+  </body>
+</html>
